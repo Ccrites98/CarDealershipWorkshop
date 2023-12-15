@@ -1,4 +1,4 @@
-package com.pluralsight;
+package com.pluralsight.dealership;
 class Moped extends Vehicle {
     private boolean isShortDistance;
     private boolean isEasyToOperate;
