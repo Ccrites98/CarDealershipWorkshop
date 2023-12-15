@@ -7,7 +7,7 @@ public class HomeScreen {
         Scanner keyboard = new Scanner(System.in);
         String DB_URL = "jdbc:mysql://localhost:3306/cardealership";
         String USER = "root";
-        String PASS = System.getenv("CalebH05");
+        String PASS = System.getenv("my_DB_Password");
 //        DataManager dataManager = new DataManager(DB_URL, USER, PASS);
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setUrl(DB_URL);
