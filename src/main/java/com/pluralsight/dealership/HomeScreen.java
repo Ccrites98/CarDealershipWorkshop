@@ -1,5 +1,7 @@
 package com.pluralsight.dealership;
 import org.apache.commons.dbcp2.BasicDataSource;
+
+import java.util.List;
 import java.util.Scanner;
 public class HomeScreen {
     public static void main(String[] args) {
@@ -7,7 +9,13 @@ public class HomeScreen {
         String DB_URL = "jdbc:mysql://localhost:3306/cardealership";
         String USER = "root";
         String PASS = System.getenv("CalebH05");
-        DataManager dataManager = new DataManager(DB_URL, USER, PASS);
+//        DataManager dataManager = new DataManager(DB_URL, USER, PASS);
+        BasicDataSource dataSource = new BasicDataSource();
+        dataSource.setUrl(DB_URL);
+        dataSource.setUsername(USER);
+        dataSource.setPassword(PASS);
+
+        DataManager dataManager = new DataManager(dataSource);
         //down is the menu
         System.out.println("What are you looking for?");
         System.out.println("1. Search by Model");
@@ -25,71 +33,83 @@ public class HomeScreen {
         switch (choice) {
             case 1:
                 searchByModel(DB_URL, USER, PASS, keyboard);
+
+                System.out.println();
                 break;
             case 2:
                 searchByColor(DB_URL, USER, PASS, keyboard);
+                System.out.println();
                 break;
             case 3:
                 searchByPrice(DB_URL, USER, PASS, keyboard);
+                System.out.println();
                 break;
             case 4:
                 searchByMileage(DB_URL, USER, PASS, keyboard);
+                System.out.println();
                 break;
             case 5:
                 searchByYear(DB_URL, USER, PASS, keyboard);
+                System.out.println();
                 break;
             case 6:
                 searchByType(DB_URL, USER, PASS, keyboard);
+                System.out.println();
                 break;
             case 7:
                 addVehicle(DB_URL, USER, PASS, keyboard);
+                System.out.println("Vehicle has been added");
                 break;
             case 8:
                 removeVehicle(DB_URL, USER, PASS, keyboard);
+                System.out.println("Vehicle has been removed");
                 break;
             default:
                 System.out.println("Thou speak madness. Try again, knave.");
         }}
     //Field o' methods down below
-    private static void searchByModel(String dbUrl, String user, String pass, Scanner keyboard) {
-        DataManager dataManager = new DataManager(dbUrl, user, pass);
+    private static void searchByModel(String DB_URL, String USER, String PASS, Scanner keyboard) {
+        DataManager dataManager = new DataManager(DB_URL, USER, PASS);
         System.out.println("State thy model: ");
         String input = keyboard.nextLine();
+        List<String> searchResults = dataManager.getVehicleInfo(input);
         dataManager.getVehicleInfo(input);
+        System.out.println(searchResults + "These be the cars thou seekth");
+
     }
-    private static void searchByColor(String dbUrl, String user, String pass, Scanner keyboard) {
-        DataManager dataManager = new DataManager(dbUrl, user, pass);
+    private static void searchByColor(String DB_URL, String USER, String PASS, Scanner keyboard) {
+        DataManager dataManager = new DataManager(DB_URL, USER, PASS);
         System.out.println("State thy color: ");
         String input = keyboard.nextLine();
         dataManager.getVehicleInfo(input);
     }
-    private static void searchByPrice(String dbUrl, String user, String pass, Scanner keyboard) {
-        DataManager dataManager = new DataManager(dbUrl, user, pass);
+    private static void searchByPrice(String DB_URL, String USER, String PASS, Scanner keyboard) {
+        DataManager dataManager = new DataManager(DB_URL, USER, PASS);
         System.out.println("State thy price range: ");
         String input = keyboard.nextLine();
         dataManager.getVehicleInfo(input);
     }
-    private static void searchByMileage(String dbUrl, String user, String pass, Scanner keyboard) {
-        DataManager dataManager = new DataManager(dbUrl, user, pass);
+    private static void searchByMileage(String DB_URL, String USER, String PASS, Scanner keyboard) {
+        DataManager dataManager = new DataManager(DB_URL, USER, PASS);
         System.out.println("State thy mileage range: ");
         String input = keyboard.nextLine();
         dataManager.getVehicleInfo(input);
     }
-    private static void searchByYear(String dbUrl, String user, String pass, Scanner keyboard) {
-        DataManager dataManager = new DataManager(dbUrl, user, pass);
+    private static void searchByYear(String DB_URL, String USER, String PASS, Scanner keyboard) {
+        DataManager dataManager = new DataManager(DB_URL, USER, PASS);
         System.out.println("State thy year: ");
         String input = keyboard.nextLine();
         dataManager.getVehicleInfo(input);
     }
-    private static void searchByType(String dbUrl, String user, String pass, Scanner keyboard) {
-        DataManager dataManager = new DataManager(dbUrl, user, pass);
+    private static void searchByType(String DB_URL, String USER, String PASS, Scanner keyboard) {
+        DataManager dataManager = new DataManager(DB_URL, USER, PASS);
         System.out.println("State thy type: ");
         String input = keyboard.nextLine();
         dataManager.getVehicleInfo(input);
     }
     //methods for adding and removing vehicles from the db
-    private static void addVehicle(String dbUrl, String user, String pass, Scanner keyboard) {
-        DataManager dataManager = new DataManager(dbUrl, user, pass);
+    private static void addVehicle(String DB_URL, String USER, String PASS, Scanner keyboard) {
+        DataManager dataManager = new DataManager(DB_URL, USER, PASS);
         System.out.println("Enter vehicle details:");
         System.out.print("Model: ");
         String model = keyboard.nextLine();
@@ -107,8 +127,8 @@ public class HomeScreen {
         dataManager.insertData("Vehicles", "Model, Color, Price, Mileage, Year, Type", values);
         System.out.println("Vehicle added successfully!");
     }
-private static void removeVehicle(String dbUrl, String user, String pass, Scanner keyboard) {
-DataManager dataManager = new DataManager(dbUrl, user, pass);
+private static void removeVehicle(String DB_URL, String USER, String PASS, Scanner keyboard) {
+DataManager dataManager = new DataManager(DB_URL, USER, PASS);
 System.out.print("Enter the model of the vehicle to remove: ");
 String modelToRemove = keyboard.nextLine();
 String[] values = {modelToRemove};

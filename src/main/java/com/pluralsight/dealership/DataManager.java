@@ -1,25 +1,22 @@
 package com.pluralsight.dealership;
-import org.apache.commons.dbcp2.BasicDataSource;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.sql.DataSource;
-import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 public class DataManager {
-    private DataSource dataSource;
-    public DataManager(String jdbcUrl, String USER, String PASS) {
-        initializeDataSource(jdbcUrl, USER, PASS);
+    private DataSource datasource;
+
+    public DataManager(String DB_URL, String USER, String PASS) {
     }
-    private void initializeDataSource(String jdbcUrl, String USER, String PASS) {
-        BasicDataSource basicDataSource = new BasicDataSource();
-        basicDataSource.setUrl("jdbc:mysql://localhost:3306/cardealership");
-        basicDataSource.setUsername("root");
-        basicDataSource.setPassword("CalebH05");
-        this.dataSource = basicDataSource;
-    }
+        public DataManager(DataSource datasource) {this.datasource = datasource;}
+
     public List<String> getVehicleInfo(String vehicles) {
         List<String> cars = new ArrayList<>();
-        try (Connection connection = dataSource.getConnection()) {
-            try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Vehicles WHERE Vehicles = ?")) {
+        try (Connection connection = datasource.getConnection()) {
+            try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Vehicles WHERE CarModel = ?")) {
                 preparedStatement.setString(1, vehicles.toString());
                 ResultSet resultSet = preparedStatement.executeQuery();
                 while (resultSet.next()) {
@@ -42,7 +39,7 @@ public class DataManager {
         return cars;
     }
     public void insertData(String tableName, String columnNames, String[] values) {
-        try (Connection connection = dataSource.getConnection()) {
+        try (Connection connection = datasource.getConnection()) {
             String columns = String.join(", ", columnNames.split(","));
             String placeholders = String.join(", ", repeat("?", values.length));
             String insertQuery = String.format("INSERT INTO %s (%s) VALUES (%s)", tableName, columns, placeholders);
@@ -58,7 +55,7 @@ public class DataManager {
         }
     }
     public void deleteData(String tableName, String columnName, String[] values) {
-        try (Connection connection = dataSource.getConnection()) {
+        try (Connection connection = datasource.getConnection()) {
             String placeholders = String.join(", ", repeat("?", values.length));
             String deleteQuery = String.format("DELETE FROM %s WHERE %s IN (%s)", tableName, columnName, placeholders);
 
