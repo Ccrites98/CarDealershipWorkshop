@@ -8,11 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 public class DataManager {
     private DataSource datasource;
-
-    public DataManager(String DB_URL, String USER, String PASS) {
-    }
         public DataManager(DataSource datasource) {this.datasource = datasource;}
-
     public List<String> getVehicleInfo(String vehicles) {
         List<String> cars = new ArrayList<>();
         try (Connection connection = datasource.getConnection()) {
@@ -52,8 +48,7 @@ public class DataManager {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        }
-    }
+        }}
     public void deleteData(String tableName, String columnName, String[] values) {
         try (Connection connection = datasource.getConnection()) {
             String placeholders = String.join(", ", repeat("?", values.length));
@@ -67,8 +62,7 @@ public class DataManager {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        }
-    }
+        }}
     private String[] repeat(String value, int count) {
         String[] array = new String[count];
         for (int i = 0; i < count; i++) {
@@ -77,5 +71,4 @@ public class DataManager {
         return array;
     }
     public void closeConnection() {
-    }
-}
+    }}
