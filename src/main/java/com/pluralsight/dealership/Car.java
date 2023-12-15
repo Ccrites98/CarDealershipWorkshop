@@ -1,4 +1,4 @@
-package com.pluralsight;
+package com.pluralsight.dealership;
 
 class Car extends Vehicle {
     public Car(String color,

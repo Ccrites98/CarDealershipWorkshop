@@ -1,4 +1,4 @@
-package com.pluralsight;
+package com.pluralsight.dealership;
 class Vehicle {
     private String color;
     private int numberOfPassengers;
